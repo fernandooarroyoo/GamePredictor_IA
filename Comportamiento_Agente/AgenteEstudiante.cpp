@@ -95,8 +95,82 @@ AgenteEstudiante::Resultado AgenteEstudiante::Status(const Tablero &tablero, std
     nodosVisitados++;
     /* ============== Empieza a partir de aquí tu implementación  =============== */
 
+    int jugadorActual = tablero.getJugadorTurno();
 
-    return Resultado::EMPATE;
+    int ganador = tablero.comprobarGanador();
+
+    if(ganador == jugadorActual)
+    {
+      return Resultado::VICTORIA;
+    }else if( ganador != 0 and ganador != -1)
+    {
+      return Resultado::DERROTA;
+    }else if(ganador == -1)
+    {
+      return Resultado::EMPATE;
+    }
+
+    std::vector<std::pair<Tablero, std::pair<int,int>>> sucesores = tablero.getSucesoresConMovimientos();
+
+    if(sucesores.empty())
+    {
+      int ganadorDesempate = tablero.getGanadorDesempate();
+      if(ganadorDesempate == jugadorActual) return Resultado::VICTORIA;
+      if(ganadorDesempate == -1) return Resultado::EMPATE;
+      return Resultado::DERROTA;
+    }
+
+    //para buscar la jugada menos mala
+    bool posibleEmpate = false;
+    std::pair<int,int> mejorMovEmpate = sucesores[0].second;
+
+    Mov = sucesores[0].second;
+
+    for(const auto& sucesor : sucesores)
+    {
+      const Tablero& hijo = sucesor.first;
+      std::pair<int,int> movHijo = sucesor.second;
+
+      std::pair<int,int> movDummy;
+      Resultado resHijo = Status(hijo,movDummy);
+
+      int jugadorHijo = hijo.getJugadorTurno();
+
+      if(jugadorActual == jugadorHijo)
+      {
+        if(resHijo == Resultado::VICTORIA)
+        {
+          Mov = movHijo;
+          return Resultado::VICTORIA;
+        }
+        else if(resHijo == Resultado::EMPATE)
+        {
+          posibleEmpate = true;
+          mejorMovEmpate = movHijo;
+        }
+      }
+      else
+      {
+        if(resHijo == Resultado::DERROTA)
+        {
+          Mov = movHijo;
+          return Resultado::VICTORIA; 
+        }
+        else if(resHijo == Resultado::EMPATE)
+        {
+          posibleEmpate = true;
+          mejorMovEmpate = movHijo;
+        }
+      }
+    }
+
+    if(posibleEmpate)
+    {
+      Mov = mejorMovEmpate;
+      return Resultado::EMPATE;
+    }
+
+    return Resultado::DERROTA;
 }
 
 
