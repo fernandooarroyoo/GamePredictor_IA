@@ -88,6 +88,7 @@ private:
     double heuristica2(const Tablero& tablero);
 
 
+
 };
 
 #endif // AGENTE_ESTUDIANTE_HPP
