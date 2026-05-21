@@ -222,7 +222,7 @@ double AgenteEstudiante::minimax(const Tablero &tablero, int profundidad, int pr
     return heuristica(tablero);
   }
 
-  auto sucesores = tablero.getSucesoresConMovimientos();
+  auto sucesores = tablero.getSucesoresConMovimientos(); 
 
   // tablero lleno, no se generan hijos => evaluamos por puntos el desempate
   if (sucesores.empty())
@@ -238,7 +238,7 @@ double AgenteEstudiante::minimax(const Tablero &tablero, int profundidad, int pr
   double mejorValor = soyMax ? MenosInfinito : MasInfinito;
   Mov = sucesores[0].second;
 
-  for (const auto &sucesor : sucesores)
+  for (const auto &sucesor : sucesores) //auto es, Vector de {Tablero,Movimiento}
   {
     if (abortarBanda)
       return 0;
@@ -246,8 +246,8 @@ double AgenteEstudiante::minimax(const Tablero &tablero, int profundidad, int pr
     const Tablero &hijo = sucesor.first;
     std::pair<int, int> movHijo = sucesor.second;
 
-    std::pair<int, int> movDummy;
-    double valorHijo = minimax(hijo, profundidad + 1, prof_Max, movDummy);
+    std::pair<int, int> movTmp;
+    double valorHijo = minimax(hijo, profundidad + 1, prof_Max, movTmp);
 
     if (soyMax)
     {
@@ -347,7 +347,7 @@ double AgenteEstudiante::alfaBeta(const Tablero &tablero, int profundidad, int p
   Mov = sucesores[0].second;
 
   //BUCLE ALFA-BETA
-  for (const auto &sucesor : sucesores)
+  for (const auto &sucesor : sucesores) // auto es de tipo de dato std::vector<std::pair<Tablero, std::pair<int,int>>> VECTOR DE {TABLERO,MOVIMIENTO}
   {
     //mirar tiempo
     if (abortarBanda)
@@ -356,8 +356,8 @@ double AgenteEstudiante::alfaBeta(const Tablero &tablero, int profundidad, int p
     const Tablero &hijo = sucesor.first;
     std::pair<int, int> movHijo = sucesor.second;
 
-    std::pair<int, int> movDummy; //variable temporal, la utilizamos en la recursividad
-    double valorHijo = alfaBeta(hijo, profundidad + 1, prof_Max, alfa, beta, movDummy);
+    std::pair<int, int> movTmp; //variable temporal, la utilizamos en la recursividad
+    double valorHijo = alfaBeta(hijo, profundidad + 1, prof_Max, alfa, beta, movTmp);
 
     if (soyMax)
     {
