@@ -3,7 +3,7 @@
 
 #include "Tablero.hpp"
 #include "ControladorJuego.hpp"
-#include <GL/glut.h>
+#include <GLUT/glut.h>
 #include <memory>
 #include <vector>
 
