@@ -476,48 +476,12 @@ double AgenteEstudiante::heuristica1(const Tablero &tablero)
   if (ganador == -1)
     return 0.0; // Empate
 
-  //precalculamos huecos vacíos
-  int faseActual = tablero.getFaseActual() % 3;
-  int faseMia = (tablero.getJugadorTurno() == id) ? faseActual : (faseActual + 1) % 3;
-  int faseRival = (tablero.getJugadorTurno() == oponente) ? faseActual : (faseActual + 1) % 3;
-
-  std::vector<std::vector<bool>> jugableMia(filas, std::vector<bool>(columnas, false));
-  std::vector<std::vector<bool>> jugableRival(filas, std::vector<bool>(columnas, false));
-
   // Preferimos el centro, miramos las casillas especiales y vemos si hay adyacencia
   for (int f = 0; f < filas; f++)
   {
     for (int c = 0; c < columnas; c++)
     {
       int celda = tablero.getCelda(f, c);
-
-      //calculo de adyacencia
-      if (celda == 0) //si esta vacia
-      {
-        bool tieneAdyacente = false;
-        for (int df = -1; df <= 1 && !tieneAdyacente; df++)
-        {
-          for (int dc = -1; dc <= 1 && !tieneAdyacente; dc++)
-          {
-            if (df == 0 && dc == 0) //no nos interesa mirar la casilla en la que ya estamos
-              continue;
-            int nf = f + df;
-            int nc = c + dc;
-            if (nf >= 0 && nf < filas && nc >= 0 && nc < columnas)
-            {
-              if (tablero.getCelda(nf, nc) != 0)
-                tieneAdyacente = true;
-            }
-          }
-        }
-        if (tieneAdyacente)
-        {
-          if ((f + c) % 3 == faseMia)
-            jugableMia[f][c] = true;
-          if ((f + c) % 3 == faseRival)
-            jugableRival[f][c] = true;
-        }
-      }
 
       //Para fichas colocadas
       if (celda != 0)
